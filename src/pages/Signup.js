@@ -128,7 +128,7 @@ export default function Signup() {
 
     firebaseConfig.auth().createUserWithEmailAndPassword(userValues.email, userValues.password)
       .then((userCredential) => {
-        firebaseConfig.database().ref('/storeUsers/' + (userValues.username)).update(userValues)
+        firebaseConfig.database().ref('/storeUsers/user' + (userCredential.user.uid)).update(userValues)
           .then((result) => {
             setFormDisabler("none")
             setVfDisabler("visible")

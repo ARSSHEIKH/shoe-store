@@ -4,7 +4,25 @@ import { InputLabel, Input, InputAdornment, IconButton, Button, FormControl } fr
 import {Visibility, VisibilityOff} from '@material-ui/icons';
 import {Link} from 'react-router-dom';
 import "./login.css"
-import PageConstuction from "../Components/pageConstruction";
+import { firebaseConfig as firebase} from "../Configs/fbsConfig"
+import "firebase/auth";
+
+
+const UserLogin = (userValues) => (e) => {
+  e.preventDefault();
+  console.log(userValues.email, userValues.password)
+  firebase.auth().signInWithEmailAndPassword(userValues.email, userValues.password)
+  .then((userCredential) => {
+    console.log("Done: ", userCredential)
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    
+    console.log(errorCode)
+    console.log(errorMessage)
+  });
+}
 
 const useStyles = makeStyles((theme) => ({
   mainRoot: {
@@ -25,10 +43,8 @@ const useStyles = makeStyles((theme) => ({
 export default function LoginForm() {
   const classes = useStyles();
   const [values, setValues] = React.useState({
-    amount: '',
+    email: '',
     password: '',
-    weight: '',
-    weightRange: '',
     showPassword: false,
   });
   
@@ -46,20 +62,23 @@ export default function LoginForm() {
   };
   return (
     <div className={classes.mainRoot}>
-      {/* <h3 className="loginFormConstruct">Page Under Construction</h3> */}
-      <PageConstuction/>
       <div className="loginForm">
       <h3>Login to site</h3>
-      <form className={classes.root} autoComplete="off">
+      <form className={classes.root} autoComplete="off" onSubmit={UserLogin(values)}>
           <FormControl>
             <InputLabel htmlFor="my-input">Email address</InputLabel>
-            <Input id="my-input" type="email" aria-describedby="my-helper-text" required disabled/>
+            <Input
+              id="my-input"
+              type="email"
+              aria-describedby="my-helper-text"
+              required
+              onChange={handleChange('email')}
+            />
           </FormControl>
           <br/>
           <FormControl>
             <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
             <Input
-              disabled
                 required
                 id="standard-adornment-password"
                 type={values.showPassword ? 'text' : 'password'}
