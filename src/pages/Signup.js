@@ -77,7 +77,7 @@ export default function Signup() {
   }
   function sendingVerification() {
     var actionCodeSettings = {
-      url: 'http://localhost:3000/Signup',
+      url: 'http://localhost:3000/Signup' || "https://arsprostore.web.app/Signup",
       handleCodeInApp: true,
     };
     firebaseConfig.auth().sendSignInLinkToEmail(userValues.email, actionCodeSettings)
